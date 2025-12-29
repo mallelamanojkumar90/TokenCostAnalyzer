@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Filter } from 'lucide-react';
 import { getCostBreakdown, formatCurrency, getCostBadgeClass } from '../utils/tokenUtils';
 
 interface CostComparisonProps {
@@ -6,12 +8,22 @@ interface CostComparisonProps {
   outputTokens: number;
 }
 
+type ProviderFilter = 'All' | 'OpenAI' | 'Anthropic' | 'Google' | 'Groq';
+
 export default function CostComparison({ inputTokens, outputTokens }: CostComparisonProps) {
-  const costBreakdown = getCostBreakdown(inputTokens, outputTokens);
+  const [selectedProvider, setSelectedProvider] = useState<ProviderFilter>('All');
+  
+  const allCostBreakdown = getCostBreakdown(inputTokens, outputTokens);
+  
+  // Filter cost breakdown based on selected provider
+  const costBreakdown = selectedProvider === 'All' 
+    ? allCostBreakdown 
+    : allCostBreakdown.filter(item => item.provider === selectedProvider);
 
   // Data for bar chart
   const barChartData = costBreakdown.map(item => ({
     name: item.modelName,
+    provider: item.provider,
     'Input Cost': parseFloat(item.inputCost.toFixed(6)),
     'Output Cost': parseFloat(item.outputCost.toFixed(6)),
     'Total': parseFloat(item.totalCost.toFixed(6))
@@ -23,6 +35,8 @@ export default function CostComparison({ inputTokens, outputTokens }: CostCompar
     value: parseFloat(item.totalCost.toFixed(6)),
     color: item.color
   }));
+
+  const providers: ProviderFilter[] = ['All', 'OpenAI', 'Anthropic', 'Google', 'Groq'];
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -42,9 +56,30 @@ export default function CostComparison({ inputTokens, outputTokens }: CostCompar
 
   return (
     <div className="card">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        Cost Comparison Across Models
-      </h2>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Cost Comparison Across Models
+        </h2>
+        
+        {/* Provider Filter Dropdown */}
+        <div className="flex items-center space-x-3">
+          <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+          <select
+            value={selectedProvider}
+            onChange={(e) => setSelectedProvider(e.target.value as ProviderFilter)}
+            className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 cursor-pointer"
+          >
+            {providers.map(provider => (
+              <option key={provider} value={provider}>
+                {provider === 'All' ? 'All Providers' : provider}
+              </option>
+            ))}
+          </select>
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            ({costBreakdown.length} {costBreakdown.length === 1 ? 'model' : 'models'})
+          </span>
+        </div>
+      </div>
 
       {/* Cost Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -117,7 +152,7 @@ export default function CostComparison({ inputTokens, outputTokens }: CostCompar
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(1)}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -127,7 +162,7 @@ export default function CostComparison({ inputTokens, outputTokens }: CostCompar
                 ))}
               </Pie>
               <Tooltip 
-                formatter={(value: number) => formatCurrency(value)}
+                formatter={(value: number | undefined) => value !== undefined ? formatCurrency(value) : '$0.00'}
                 contentStyle={{
                   backgroundColor: 'rgba(31, 41, 55, 0.9)',
                   border: '1px solid #374151',

@@ -9,7 +9,12 @@ A powerful React-based application that helps developers understand and optimize
 ### 📊 Core Functionality
 
 - **Real-time Token Estimation**: Accurate token counting using `gpt-tokenizer`
-- **Multi-Model Cost Comparison**: Compare costs across GPT-4, GPT-3.5-turbo, Claude Sonnet, and Claude Haiku
+- **Multi-Model Cost Comparison**: Compare costs across 10 models from 4 providers:
+  - OpenAI (GPT-4, GPT-3.5-turbo)
+  - Anthropic (Claude Sonnet, Claude Haiku)
+  - Google (Gemini 1.5 Pro, Gemini 1.5 Flash, Gemini 2.0 Flash)
+  - Groq (Llama 3.1 70B, Llama 3.1 8B, Mixtral 8x7B)
+- **Provider Filtering**: Filter models by provider (All, OpenAI, Anthropic, Google, Groq) for focused comparison
 - **Interactive Visualizations**: Beautiful charts powered by Recharts
   - Bar charts for cost breakdown
   - Pie charts for cost distribution
@@ -127,12 +132,18 @@ The optimized build will be in the `dist` folder.
 
 The application includes pricing for the following models:
 
-| Model         | Input (per 1K tokens) | Output (per 1K tokens) | Provider  |
-| ------------- | --------------------- | ---------------------- | --------- |
-| GPT-4         | $0.03                 | $0.06                  | OpenAI    |
-| GPT-3.5-turbo | $0.0015               | $0.002                 | OpenAI    |
-| Claude Sonnet | $0.003                | $0.015                 | Anthropic |
-| Claude Haiku  | $0.00025              | $0.00125               | Anthropic |
+| Model                | Input (per 1K tokens) | Output (per 1K tokens) | Provider  |
+| -------------------- | --------------------- | ---------------------- | --------- |
+| GPT-4                | $0.03                 | $0.06                  | OpenAI    |
+| GPT-3.5-turbo        | $0.0015               | $0.002                 | OpenAI    |
+| Claude Sonnet        | $0.003                | $0.015                 | Anthropic |
+| Claude Haiku         | $0.00025              | $0.00125               | Anthropic |
+| Gemini 1.5 Pro       | $0.00125              | $0.005                 | Google    |
+| Gemini 1.5 Flash     | $0.000075             | $0.0003                | Google    |
+| Gemini 2.0 Flash     | $0.00 (Free)          | $0.00 (Free)           | Google    |
+| Llama 3.1 70B (Groq) | $0.00059              | $0.00079               | Groq      |
+| Llama 3.1 8B (Groq)  | $0.00005              | $0.00008               | Groq      |
+| Mixtral 8x7B (Groq)  | $0.00024              | $0.00024               | Groq      |
 
 _Note: Prices are accurate as of December 2025. Always verify current pricing with providers._
 

@@ -55,7 +55,8 @@ export function getCostBreakdown(
       inputCost,
       outputCost,
       totalCost: inputCost + outputCost,
-      color: model.color
+      color: model.color,
+      provider: model.provider
     };
   });
 }

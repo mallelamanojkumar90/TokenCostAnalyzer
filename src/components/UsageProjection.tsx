@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp } from 'lucide-react';
-import { getCostBreakdown, formatCurrency, calculateMonthlyProjection } from '../utils/tokenUtils';
+import { TrendingUp, Filter } from 'lucide-react';
+import { getCostBreakdown, calculateMonthlyProjection } from '../utils/tokenUtils';
 import { USAGE_FREQUENCIES } from '../utils/constants';
 
 interface UsageProjectionProps {
@@ -9,10 +9,18 @@ interface UsageProjectionProps {
   outputTokens: number;
 }
 
+type ProviderFilter = 'All' | 'OpenAI' | 'Anthropic' | 'Google' | 'Groq';
+
 export default function UsageProjection({ inputTokens, outputTokens }: UsageProjectionProps) {
   const [selectedFrequency, setSelectedFrequency] = useState(100); // Default: 100 times/day
+  const [selectedProvider, setSelectedProvider] = useState<ProviderFilter>('All');
 
-  const costBreakdown = getCostBreakdown(inputTokens, outputTokens);
+  const allCostBreakdown = getCostBreakdown(inputTokens, outputTokens);
+  
+  // Filter cost breakdown based on selected provider
+  const costBreakdown = selectedProvider === 'All' 
+    ? allCostBreakdown 
+    : allCostBreakdown.filter(item => item.provider === selectedProvider);
 
   // Generate projection data for chart
   const projectionData = [1, 10, 50, 100, 500, 1000].map(frequency => {
@@ -33,6 +41,8 @@ export default function UsageProjection({ inputTokens, outputTokens }: UsageProj
     yearlyCost: calculateMonthlyProjection(cost.totalCost, selectedFrequency) * 12
   }));
 
+  const providers: ProviderFilter[] = ['All', 'OpenAI', 'Anthropic', 'Google', 'Groq'];
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -51,11 +61,32 @@ export default function UsageProjection({ inputTokens, outputTokens }: UsageProj
 
   return (
     <div className="card">
-      <div className="flex items-center space-x-3 mb-6">
-        <TrendingUp className="w-6 h-6 text-blue-500" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Usage Projection
-        </h2>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <div className="flex items-center space-x-3">
+          <TrendingUp className="w-6 h-6 text-blue-500" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Usage Projection
+          </h2>
+        </div>
+        
+        {/* Provider Filter Dropdown */}
+        <div className="flex items-center space-x-3">
+          <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+          <select
+            value={selectedProvider}
+            onChange={(e) => setSelectedProvider(e.target.value as ProviderFilter)}
+            className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 cursor-pointer"
+          >
+            {providers.map(provider => (
+              <option key={provider} value={provider}>
+                {provider === 'All' ? 'All Providers' : provider}
+              </option>
+            ))}
+          </select>
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            ({costBreakdown.length} {costBreakdown.length === 1 ? 'model' : 'models'})
+          </span>
+        </div>
       </div>
 
       {/* Frequency Selector */}

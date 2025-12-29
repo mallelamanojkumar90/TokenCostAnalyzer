@@ -20,6 +20,7 @@ export interface CostBreakdown {
   outputCost: number;
   totalCost: number;
   color: string;
+  provider: string;
 }
 
 export interface PromptIssue {
