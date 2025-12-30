@@ -22,51 +22,53 @@ export default function ExamplesSection({ onSelectExample }: ExamplesSectionProp
   );
 
   return (
-    <div className="card">
+    <div className="card-premium p-6 fade-up" style={{ animationDelay: '0.4s' }}>
       <div className="flex items-center space-x-3 mb-6">
-        <BookOpen className="w-6 h-6 text-purple-500" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="p-2 bg-purple-500/10 rounded-lg">
+          <BookOpen className="w-6 h-6 text-purple-500" />
+        </div>
+        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
           Good vs Bad Prompts
         </h2>
       </div>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
-        Learn from examples of well-optimized and poorly-optimized prompts
+      <p className="text-slate-600 dark:text-slate-400 mb-8 font-medium">
+        Master the art of prompt engineering by comparing optimized vs inefficient patterns.
       </p>
 
       {/* Filter Buttons */}
-      <div className="flex space-x-3 mb-6">
+      <div className="flex flex-wrap gap-3 mb-8">
         <button
           onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 border-2 ${
             filter === 'all'
-              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 border-slate-900 dark:border-slate-100 shadow-lg'
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
           }`}
         >
           All Examples
         </button>
         <button
           onClick={() => setFilter('good')}
-          className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center space-x-2 border-2 ${
             filter === 'good'
-              ? 'bg-green-600 text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg'
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-emerald-500/50'
           }`}
         >
           <ThumbsUp className="w-4 h-4" />
-          <span>Good Examples</span>
+          <span>Optimized</span>
         </button>
         <button
           onClick={() => setFilter('bad')}
-          className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center space-x-2 border-2 ${
             filter === 'bad'
-              ? 'bg-red-600 text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-rose-600 border-rose-600 text-white shadow-lg'
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-rose-500/50'
           }`}
         >
           <ThumbsDown className="w-4 h-4" />
-          <span>Bad Examples</span>
+          <span>Inefficient</span>
         </button>
       </div>
 
@@ -80,65 +82,55 @@ export default function ExamplesSection({ onSelectExample }: ExamplesSectionProp
           return (
             <div
               key={index}
-              className={`p-5 rounded-lg border-2 transition-all duration-300 hover:shadow-lg ${
+              className={`card-premium p-6 border-l-4 transition-all duration-300 hover:scale-[1.01] ${
                 example.type === 'good'
-                  ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/10'
-                  : 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/10'
+                  ? 'border-l-emerald-500 bg-emerald-500/5'
+                  : 'border-l-rose-500 bg-rose-500/5'
               }`}
             >
-              {/* Header */}
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-2">
-                  {example.type === 'good' ? (
-                    <ThumbsUp className="w-5 h-5 text-green-600 dark:text-green-400" />
-                  ) : (
-                    <ThumbsDown className="w-5 h-5 text-red-600 dark:text-red-400" />
-                  )}
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                  <h3 className="font-bold text-slate-900 dark:text-white uppercase tracking-tight text-sm">
                     {example.title}
                   </h3>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                  example.type === 'good'
-                    ? 'bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200'
-                    : 'bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200'
+                <span className={`status-pill ${
+                  example.type === 'good' ? 'status-pill-green' : 'status-pill-amber'
                 }`}>
                   {tokens} tokens
                 </span>
               </div>
 
-              {/* Prompt */}
-              <div className="mb-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                <p className="text-sm text-gray-700 dark:text-gray-300 font-mono whitespace-pre-wrap">
+              <div className="mb-4 p-4 bg-white/50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 backdrop-blur-sm">
+                <p className="text-xs text-slate-700 dark:text-slate-300 font-mono whitespace-pre-wrap leading-relaxed">
                   {example.prompt}
                 </p>
               </div>
 
-              {/* Explanation */}
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                <strong>Why:</strong> {example.explanation}
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                <span className="font-black text-[10px] uppercase tracking-wider block mb-1 opacity-50">Rationale</span>
+                {example.explanation}
               </p>
 
-              {/* Actions */}
-              <div className="flex space-x-2">
+              <div className="flex space-x-3">
                 <button
                   onClick={() => onSelectExample(example.prompt)}
-                  className="flex-1 btn-primary text-sm py-2"
+                  className="flex-1 btn-gradient text-xs py-2 px-3 rounded-lg"
                 >
-                  Use This Example
+                  Apply Patterns
                 </button>
                 <button
                   onClick={() => handleCopy(example.prompt, exampleId)}
-                  className="btn-secondary text-sm py-2 px-4 flex items-center space-x-2"
+                  className="btn-outline text-xs py-2 px-4 flex items-center space-x-2 rounded-lg"
                 >
                   {isCopied ? (
                     <>
-                      <Check className="w-4 h-4" />
-                      <span>Copied!</span>
+                      <Check className="w-3 h-3 text-emerald-500" />
+                      <span className="text-emerald-500">Copied</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4" />
+                      <Copy className="w-3 h-3" />
                       <span>Copy</span>
                     </>
                   )}
@@ -150,16 +142,20 @@ export default function ExamplesSection({ onSelectExample }: ExamplesSectionProp
       </div>
 
       {/* Summary */}
-      <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-        <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-          📖 Key Takeaways
+      <div className="mt-8 p-6 bg-slate-100/50 dark:bg-slate-900/30 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <h4 className="flex items-center text-sm font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-[0.2em]">
+          <span className="mr-3">🚀</span> High-Performance Guidelines
         </h4>
-        <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-          <li>• Good prompts are concise, specific, and well-structured</li>
-          <li>• Bad prompts contain filler words, repetition, and unnecessary context</li>
-          <li>• Optimizing your prompts can reduce costs by 50-80%</li>
-          <li>• Use bullet points and clear formatting for better efficiency</li>
-        </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-3">
+            <li className="flex items-start"><span className="text-blue-500 mr-2">✦</span> Eliminate redundancy and filler phrases</li>
+            <li className="flex items-start"><span className="text-blue-500 mr-2">✦</span> Define explicit roles and constraints</li>
+          </ul>
+          <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-3">
+            <li className="flex items-start"><span className="text-blue-500 mr-2">✦</span> Use delimited structures (JSON, Markdown)</li>
+            <li className="flex items-start"><span className="text-blue-500 mr-2">✦</span> Leverage few-shot examples for complex tasks</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

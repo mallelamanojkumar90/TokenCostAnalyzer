@@ -48,7 +48,7 @@ export default function ExportSection({
       if (!element) return;
 
       const canvas = await html2canvas(element as HTMLElement, {
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff',
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#0f172a' : '#ffffff',
         scale: 2
       });
 
@@ -71,7 +71,7 @@ export default function ExportSection({
       if (!element) return;
 
       const canvas = await html2canvas(element as HTMLElement, {
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff',
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#0f172a' : '#ffffff',
         scale: 2
       });
 
@@ -93,30 +93,33 @@ export default function ExportSection({
   };
 
   return (
-    <div className="card">
+    <div className="card-premium p-6 fade-up" style={{ animationDelay: '0.5s' }}>
       <div className="flex items-center space-x-3 mb-6">
-        <Download className="w-6 h-6 text-green-500" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Export Results
+        <div className="p-2 bg-emerald-500/10 rounded-lg">
+          <Download className="w-6 h-6 text-emerald-500" />
+        </div>
+        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400">
+          Intelligence Export
         </h2>
       </div>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
-        Save your analysis for future reference or sharing
+      <p className="text-slate-600 dark:text-slate-400 mb-10 font-medium">
+        Preserve your configurations and findings for audit or collaboration.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {/* Export as JSON */}
         <button
           onClick={handleExportJSON}
-          className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg border-2 border-blue-300 dark:border-blue-700 hover:shadow-lg transition-all duration-300 hover:scale-105"
+          className="group relative p-8 card-premium bg-white/30 hover:bg-white/50 dark:hover:bg-slate-800/50 transition-all duration-500 hover:scale-[1.05] border-t-2 border-t-blue-500"
         >
-          <FileJson className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-3" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-            Export as JSON
+          <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+          <FileJson className="w-10 h-10 text-blue-500 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
+          <h3 className="font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-tighter">
+            JSON Matrix
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Download all data in JSON format for programmatic use
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest opacity-60">
+            Raw Data Object
           </p>
         </button>
 
@@ -124,14 +127,15 @@ export default function ExportSection({
         <button
           onClick={handleExportPNG}
           disabled={exporting}
-          className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg border-2 border-purple-300 dark:border-purple-700 hover:shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="group relative p-8 card-premium bg-white/30 hover:bg-white/50 dark:hover:bg-slate-800/50 transition-all duration-500 hover:scale-[1.05] border-t-2 border-t-purple-500 disabled:opacity-50"
         >
-          <ImageIcon className="w-12 h-12 text-purple-600 dark:text-purple-400 mx-auto mb-3" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-            Export as PNG
+          <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+          <ImageIcon className="w-10 h-10 text-purple-500 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
+          <h3 className="font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-tighter">
+            Snapshot PNG
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {exporting ? 'Generating...' : 'Save as high-quality image'}
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest opacity-60">
+            High-Res Visual
           </p>
         </button>
 
@@ -139,23 +143,23 @@ export default function ExportSection({
         <button
           onClick={handleExportPDF}
           disabled={exporting}
-          className="p-6 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 rounded-lg border-2 border-pink-300 dark:border-pink-700 hover:shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="group relative p-8 card-premium bg-white/30 hover:bg-white/50 dark:hover:bg-slate-800/50 transition-all duration-500 hover:scale-[1.05] border-t-2 border-t-emerald-500 disabled:opacity-50"
         >
-          <Download className="w-12 h-12 text-pink-600 dark:text-pink-400 mx-auto mb-3" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-            Export as PDF
+          <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+          <Download className="w-10 h-10 text-emerald-500 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
+          <h3 className="font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-tighter">
+            Dossier PDF
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {exporting ? 'Generating...' : 'Create a PDF report'}
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest opacity-60">
+            Structured Report
           </p>
         </button>
       </div>
 
       {exporting && (
-        <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-          <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center">
-            ⏳ Generating export... This may take a few seconds.
-          </p>
+        <div className="mt-10 p-4 bg-slate-900 dark:bg-slate-100 rounded-2xl flex items-center justify-center space-x-3 text-white dark:text-slate-900 font-black uppercase text-[10px] tracking-widest animate-pulse">
+          <div className="w-4 h-4 border-2 border-white/20 dark:border-slate-900/20 border-t-white dark:border-t-slate-900 rounded-full animate-spin" />
+          <span>Synchronizing Assets...</span>
         </div>
       )}
     </div>

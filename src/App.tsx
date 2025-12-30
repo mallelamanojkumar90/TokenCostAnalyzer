@@ -102,36 +102,39 @@ function App() {
   const currentOutputTokens = estimateOutputTokens(currentTokens);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
       {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700">
+      <header className="card-premium sticky top-0 z-50 rounded-none border-x-0 border-t-0 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl shadow-lg">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
+            <div className="flex items-center space-x-4">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 p-3 rounded-2xl shadow-xl">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent tracking-tight">
                   Token Cost Analyzer
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Optimize your prompts, minimize your costs
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                  Precision Prompt Engineering
                 </p>
               </div>
             </div>
             
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-3 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
+              className="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500/50 shadow-sm transition-all duration-300 hover:scale-110 active:scale-95"
               aria-label="Toggle dark mode"
             >
               {darkMode ? (
-                <Sun className="w-6 h-6 text-yellow-500" />
+                <Sun className="w-6 h-6 text-amber-400 fill-amber-400" />
               ) : (
-                <Moon className="w-6 h-6 text-gray-700" />
+                <Moon className="w-6 h-6 text-slate-700 fill-slate-700" />
               )}
             </button>
           </div>
@@ -139,9 +142,8 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Prompt Input Section */}
-        <section className="animate-fade-in">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        <section className="fade-up">
           <PromptInput
             value={currentPrompt}
             onChange={handlePromptChange}
@@ -150,49 +152,40 @@ function App() {
           />
         </section>
 
-        {/* Token Stats */}
         {currentPrompt && (
-          <section className="animate-slide-up">
-            <TokenStats
-              inputTokens={currentTokens}
-              outputTokens={currentOutputTokens}
-            />
-          </section>
+          <>
+            <section className="fade-up">
+              <TokenStats
+                inputTokens={currentTokens}
+                outputTokens={currentOutputTokens}
+              />
+            </section>
+
+            <section className="fade-up">
+              <CostComparison
+                inputTokens={currentTokens}
+                outputTokens={currentOutputTokens}
+              />
+            </section>
+
+            <section className="fade-up">
+              <PromptAnalysis
+                text={currentPrompt}
+                tokens={currentTokens}
+              />
+            </section>
+
+            <section className="fade-up">
+              <UsageProjection
+                inputTokens={currentTokens}
+                outputTokens={currentOutputTokens}
+              />
+            </section>
+          </>
         )}
 
-        {/* Cost Comparison */}
-        {currentPrompt && (
-          <section className="animate-slide-up">
-            <CostComparison
-              inputTokens={currentTokens}
-              outputTokens={currentOutputTokens}
-            />
-          </section>
-        )}
-
-        {/* Prompt Analysis */}
-        {currentPrompt && (
-          <section className="animate-slide-up">
-            <PromptAnalysis
-              text={currentPrompt}
-              tokens={currentTokens}
-            />
-          </section>
-        )}
-
-        {/* Usage Projection */}
-        {currentPrompt && (
-          <section className="animate-slide-up">
-            <UsageProjection
-              inputTokens={currentTokens}
-              outputTokens={currentOutputTokens}
-            />
-          </section>
-        )}
-
-        {/* Prompt History */}
         {prompts.length > 0 && (
-          <section className="animate-slide-up">
+          <section className="fade-up">
             <PromptHistory
               prompts={prompts}
               selectedPrompts={selectedPrompts}
@@ -203,9 +196,8 @@ function App() {
           </section>
         )}
 
-        {/* Export Section */}
         {(currentPrompt || prompts.length > 0) && (
-          <section className="animate-slide-up">
+          <section className="fade-up">
             <ExportSection
               currentPrompt={currentPrompt}
               currentTokens={currentTokens}
@@ -216,18 +208,24 @@ function App() {
           </section>
         )}
 
-        {/* Examples Section */}
-        <section className="animate-slide-up">
+        <section className="fade-up">
           <ExamplesSection onSelectExample={setCurrentPrompt} />
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-700 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-gray-600 dark:text-gray-400 text-sm">
-            Built to help developers understand the financial impact of prompt engineering
-          </p>
+      <footer className="card-premium rounded-none border-x-0 border-b-0 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+              Built to optimize the future of AI workflows.
+            </p>
+            <div className="flex items-center space-x-6 text-xs font-bold uppercase tracking-widest text-slate-400">
+              <span>Open Source</span>
+              <span>•</span>
+              <span>Privacy Focused</span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

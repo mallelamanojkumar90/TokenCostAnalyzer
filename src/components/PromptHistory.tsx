@@ -1,6 +1,6 @@
 import { Trash2, Clock, Check } from 'lucide-react';
 import type { Prompt } from '../types';
-import { formatCurrency, getCostBreakdown, getCostBadgeClass } from '../utils/tokenUtils';
+import { formatCurrency, getCostBreakdown } from '../utils/tokenUtils';
 
 interface PromptHistoryProps {
   prompts: Prompt[];
@@ -30,21 +30,26 @@ export default function PromptHistory({
   };
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Prompt History ({prompts.length})
-        </h2>
+    <div className="card-premium p-6 fade-up" style={{ animationDelay: '0.3s' }}>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-slate-500/10 rounded-lg">
+            <Clock className="w-6 h-6 text-slate-500" />
+          </div>
+          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400">
+            Prompt History <span className="text-slate-400 opacity-50 ml-1">({prompts.length})</span>
+          </h2>
+        </div>
         <button
           onClick={onClearAll}
-          className="btn-secondary text-sm flex items-center space-x-2"
+          className="btn-outline py-2 px-4 text-xs flex items-center space-x-2"
         >
-          <Trash2 className="w-4 h-4" />
-          <span>Clear All</span>
+          <Trash2 className="w-3 h-3 text-rose-500" />
+          <span>Purge Vault</span>
         </button>
       </div>
 
-      <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+      <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
         {prompts.map((prompt) => {
           const isSelected = selectedPrompts.includes(prompt.id);
           const costs = getCostBreakdown(prompt.tokens, prompt.estimatedOutputTokens);
@@ -53,51 +58,49 @@ export default function PromptHistory({
           return (
             <div
               key={prompt.id}
-              className={`p-4 rounded-lg border-2 transition-all duration-300 ${
+              className={`card-premium p-5 border-l-4 transition-all duration-300 ${
                 isSelected
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                  ? 'border-l-blue-500 bg-blue-500/5 ring-1 ring-blue-500/20'
+                  : 'border-l-slate-200 dark:border-l-slate-800 bg-white/30 hover:border-l-blue-400'
               }`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-start space-x-3 flex-1">
-                  {/* Checkbox */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start space-x-4 flex-1">
+                  {/* Selection Checkbox */}
                   <button
                     onClick={() => onToggleSelect(prompt.id)}
-                    className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-all duration-300 ${
+                    className={`flex-shrink-0 w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all duration-300 mt-1 ${
                       isSelected
-                        ? 'bg-blue-500 border-blue-500'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-blue-400'
+                        ? 'bg-blue-600 border-blue-600 shadow-lg shadow-blue-500/30'
+                        : 'border-slate-300 dark:border-slate-700 hover:border-blue-500/50'
                     }`}
                   >
-                    {isSelected && <Check className="w-4 h-4 text-white" />}
+                    {isSelected && <Check className="w-3 h-3 text-white" />}
                   </button>
 
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-2">
+                    <p className="text-sm font-medium text-slate-800 dark:text-slate-200 line-clamp-2 mb-3">
                       {prompt.text}
                     </p>
                     
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 dark:text-gray-400">
-                      <span className="flex items-center space-x-1">
+                    <div className="flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      <span className="flex items-center space-x-1.5 px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md">
                         <Clock className="w-3 h-3" />
                         <span>{formatDate(prompt.timestamp)}</span>
                       </span>
-                      <span className="font-mono">
+                      <span className="px-2 py-1 bg-indigo-500/10 text-indigo-500 rounded-md">
                         {prompt.tokens.toLocaleString()} tokens
                       </span>
-                      <span className={getCostBadgeClass(avgCost)}>
-                        Avg: {formatCurrency(avgCost)}
+                      <span className="px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-md">
+                        {formatCurrency(avgCost)} avg
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Delete Button */}
                 <button
                   onClick={() => onDelete(prompt.id)}
-                  className="flex-shrink-0 ml-3 p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300"
+                  className="flex-shrink-0 ml-3 p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all duration-300"
                   aria-label="Delete prompt"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -105,14 +108,11 @@ export default function PromptHistory({
               </div>
 
               {/* Cost breakdown */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                 {costs.map((cost) => (
-                  <div
-                    key={cost.modelName}
-                    className="text-xs"
-                  >
-                    <div className="text-gray-600 dark:text-gray-400">{cost.modelName}</div>
-                    <div className="font-semibold" style={{ color: cost.color }}>
+                  <div key={cost.modelName} className="space-y-1">
+                    <div className="text-[9px] font-black uppercase text-slate-400 tracking-tighter truncate">{cost.modelName}</div>
+                    <div className="text-sm font-bold font-mono" style={{ color: cost.color }}>
                       {formatCurrency(cost.totalCost)}
                     </div>
                   </div>
@@ -124,9 +124,10 @@ export default function PromptHistory({
       </div>
 
       {selectedPrompts.length > 0 && (
-        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-          <p className="text-sm text-blue-800 dark:text-blue-200">
-            <strong>{selectedPrompts.length}</strong> prompt{selectedPrompts.length !== 1 ? 's' : ''} selected for comparison
+        <div className="mt-6 p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20 flex items-center justify-between">
+          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+            <span className="mr-2">⚡</span>
+            {selectedPrompts.length} prompt{selectedPrompts.length !== 1 ? 's' : ''} staged for comparative analysis
           </p>
         </div>
       )}

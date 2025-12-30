@@ -3,100 +3,124 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  }
+
+  .dark {
+    --glass-bg: rgba(17, 24, 39, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+
   body {
-    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 antialiased;
+    background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                      radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
   }
 }
 
 @layer components {
-  .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl;
+  /* Premium Glass Card */
+  .card-premium {
+    @apply backdrop-blur-md bg-opacity-70 border transition-all duration-500 ease-out;
+    background-color: var(--glass-bg);
+    border-color: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 1.25rem;
   }
 
-  .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg;
+  .card-premium:hover {
+    @apply transform -translate-y-1;
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
   }
 
-  .btn-secondary {
-    @apply bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg;
+  /* Refined Buttons */
+  .btn-gradient {
+    @apply relative overflow-hidden px-6 py-3 rounded-xl font-bold text-white transition-all duration-300
+           bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 
+           hover:shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:brightness-110 active:scale-95;
   }
 
-  .input-field {
-    @apply w-full px-4 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300;
+  .btn-gradient::after {
+    content: '';
+    @apply absolute inset-0 bg-white opacity-0 transition-opacity duration-300;
   }
 
-  .textarea-field {
-    @apply w-full px-4 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none;
+  .btn-gradient:hover::after {
+    @apply opacity-10;
   }
 
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  .btn-outline {
+    @apply px-6 py-3 rounded-xl font-semibold border-2 border-slate-200 dark:border-slate-800 
+           transition-all duration-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 
+           hover:border-blue-500 dark:hover:border-blue-500/50;
   }
 
-  .badge-green {
-    @apply badge bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+  /* Modern Input */
+  .input-premium {
+    @apply w-full px-4 py-3 bg-white/50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 
+           rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 
+           transition-all duration-300 backdrop-blur-sm;
   }
 
-  .badge-yellow {
-    @apply badge bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200;
+  /* Status Badges */
+  .status-pill {
+    @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
   }
 
-  .badge-red {
-    @apply badge bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
+  .status-pill-blue { @apply status-pill bg-blue-100/80 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300; }
+  .status-pill-green { @apply status-pill bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300; }
+  .status-pill-amber { @apply status-pill bg-amber-100/80 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300; }
+
+  /* Animated Statistics Card */
+  .stat-glow {
+    @apply relative p-6 rounded-2xl border border-white/20 dark:border-white/5 overflow-hidden;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
   }
 
-  .stat-card {
-    @apply bg-gradient-to-br p-6 rounded-xl shadow-lg text-white transform transition-all duration-300 hover:scale-105;
+  .stat-glow::before {
+    content: '';
+    @apply absolute -top-24 -left-24 w-48 h-48 bg-blue-500/20 blur-[80px] rounded-full;
   }
 }
 
-/* Custom scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-800;
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 dark:bg-gray-600 rounded-full;
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500 dark:bg-gray-500;
+/* Shimmer Animation */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-/* Animations */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
+.loader-shimmer {
+  background: linear-gradient(90deg, 
+              rgba(255,255,255,0) 0%, 
+              rgba(255,255,255,0.05) 50%, 
+              rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2s infinite;
 }
 
-.animate-shimmer {
-  animation: shimmer 2s infinite;
-  background: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
-  background-size: 1000px 100%;
+/* Smooth Entrance */
+.fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.dark .animate-shimmer {
-  background: linear-gradient(
-    to right,
-    #1f2937 0%,
-    #374151 20%,
-    #1f2937 40%,
-    #1f2937 100%
-  );
-  background-size: 1000px 100%;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
